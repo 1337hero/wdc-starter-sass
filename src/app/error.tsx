@@ -10,27 +10,24 @@ export default function ErrorPage({
 }: {
   error: Error & { digest?: string };
 }) {
-  const isAuthenticationError = error.message.includes(
-    AUTHENTICATION_ERROR_MESSAGE
-  );
+  const isAuthError = error.message === AUTHENTICATION_ERROR_MESSAGE
+
+  if (isAuthError) {
+    return (
+      <div className="container mx-auto py-12">
+        <h1 className="text-4xl mb-4">Authentication Required</h1>
+        <p className="mb-4">Please sign in to access this page.</p>
+        <Button asChild>
+          <Link href="/sign-in">Sign In</Link>
+        </Button>
+      </div>
+    )
+  }
 
   return (
-    <div className="container mx-auto py-12 min-h-screen space-y-8">
-      {isAuthenticationError ? (
-        <>
-          <h1 className={pageTitleStyles}>Oops! You Need to Be Logged In</h1>
-          <p className="text-lg">To access this page, please log in first.</p>
-
-          <Button asChild>
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
-        </>
-      ) : (
-        <>
-          <h1 className={pageTitleStyles}>Oops! Something went wrong</h1>
-          <p className="text-lg">{error.message}</p>
-        </>
-      )}
+    <div className="container mx-auto py-12">
+      <h1 className="text-4xl mb-4">Error</h1>
+      <p>{error.message}</p>
     </div>
-  );
+  )
 }
